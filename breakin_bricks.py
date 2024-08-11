@@ -20,12 +20,14 @@ brick = brick.convert_alpha()
 brick_rect = brick.get_rect()
 bricks = []
 brick_rows = 5
-brick_cols = 3
+brick_gap = 10
+brick_cols = screen.get_width() // (brick_rect[2] + brick_gap)
+side_gap = (screen.get_width() - (brick_rect[2] + brick_gap) * brick_cols + brick_gap) // 2
 #  Calculate bricks
 for y in range(brick_rows):
-    brickY = y * brick_rect[3]
+    brickY = y * (brick_rect[3] + brick_gap)
     for x in range(brick_cols):
-        brickX = x * brick_rect[2]
+        brickX = x * (brick_rect[2] + brick_gap) + side_gap
         bricks.append((brickX, brickY))
 
 clock = pygame.time.Clock()
