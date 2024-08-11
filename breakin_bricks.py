@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -8,6 +9,7 @@ pygame.display.set_caption('Glam Block Pop')
 bat = pygame.image.load('./images/paddle.png')
 bat = bat.convert_alpha()
 bat_rect = bat.get_rect()
+bat_rect[1] = screen.get_height() - 100
 
 #  Ball
 ball = pygame.image.load('./images/ball.png')
@@ -32,6 +34,7 @@ for y in range(brick_rows):
 
 clock = pygame.time.Clock()
 game_over = False
+x = 0
 
 while not game_over:
     dt = clock.tick(50)
@@ -40,9 +43,19 @@ while not game_over:
     for b in bricks:
         screen.blit(brick, b)
 
+    screen.blit(bat, bat_rect)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_over = True
+
+    pressed = pygame.key.get_pressed()
+
+    if pressed[K_LEFT]:
+        x -= 0.5 * dt
+    if pressed[K_RIGHT]:
+        x += 0.5 * dt
+    bat_rect[0] = x
 
     pygame.display.update()
 
