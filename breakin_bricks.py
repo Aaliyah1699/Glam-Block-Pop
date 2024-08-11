@@ -15,6 +15,11 @@ bat_rect[1] = screen.get_height() - 100
 ball = pygame.image.load('./images/ball.png')
 ball = ball.convert_alpha()
 ball_rect = ball.get_rect()
+ball_start = (200, 300)
+ball_speed = (3.0, 3.0)
+ball_served = False
+sx, sy = ball_speed
+ball_rect.topleft = ball_start
 
 #  Brick
 brick = pygame.image.load('./images/brick.png')
@@ -43,7 +48,9 @@ while not game_over:
     for b in bricks:
         screen.blit(brick, b)
 
+    #  Place bat & ball on screen
     screen.blit(bat, bat_rect)
+    screen.blit(ball, ball_rect)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -51,11 +58,35 @@ while not game_over:
 
     pressed = pygame.key.get_pressed()
 
+    #  Move bat
     if pressed[K_LEFT]:
         x -= 0.5 * dt
     if pressed[K_RIGHT]:
         x += 0.5 * dt
     bat_rect[0] = x
+    #  Move ball & restrict it to not go off-screen
+    if pressed[K_SPACE]:
+        ball_served = True
+    # Top
+    if ball_rect[1] <= 0:
+        ball_rect[1] = 0
+        sy *= -1
+    # Bottom
+    if ball_rect[1] >= screen.get_height() - ball_rect.height:
+        ball_rect[1] = screen.get_height() - ball_rect.height
+        sy *= -1
+    # Left
+    if ball_rect[0] <= 0:
+        ball_rect[0] = 0
+        sx *= -1
+    # Right
+    if ball_rect[0] >= screen.get_width() - ball_rect.width:
+        ball_rect[0] = screen.get_width() - ball_rect.width
+        sx *= -1
+
+    if ball_served:
+        ball_rect[0] += sx
+        ball_rect[1] += sy
 
     pygame.display.update()
 
