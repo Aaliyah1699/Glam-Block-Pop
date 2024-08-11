@@ -76,6 +76,16 @@ while not game_over:
         sx *= 1.01
         sy *= 1.01
         continue
+    # Break brick
+    delete_brick = None
+    for b in bricks:
+        bx, by = b
+        if bx <= ball_rect[0] <= bx + brick_rect.width and \
+                by <= ball_rect[1] <= by + brick_rect.height:
+            delete_brick = b
+
+    if delete_brick is not None:
+        bricks.remove(delete_brick)
 
     # Top
     if ball_rect[1] <= 0:
